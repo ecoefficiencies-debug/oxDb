@@ -1,0 +1,8 @@
+{
+  "name": "oxDb",
+  "version": "1.0.0",
+  "description": "Official OSD for airtime, mobile and APIs",
+  "dependencies": {
+    "oxDb": "github:ecoefficiencies-debug/oxDb#main"
+  }
+}
