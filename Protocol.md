@@ -13,7 +13,7 @@
 # Abstract
 
 We trade current illiquid tokens for higher valuations. ~237,000 clicks before a fan
-will get theeir hands on a ticket (included is a temp wallet to a negligible network fee).
+will get their hands on a ticket (included is a temp wallet to a negligible network fee).
 
 Add long-term utility, growth, and returns, private investors, strategic partners,
 and traditional finance - then you get the stuff we write about often.
@@ -35,15 +35,11 @@ and we surface the resulting depth as a distribution asset.
 
 That is market intervention — not manipulation, not pumping, not “MM as a service” in a Telegram DM.
 
-An open media selection of topics, people, and algorithm.
+An open media selection of topics, people, and algorithms.
 
-Not as fourth coming with our models and if neural networks — 
+Very little information/open weights tbd neural networks — 
 
-would be appraised via web UI and mobile apps. It is my belief as a founder that it is, in fact, 
-
-little of what makes us technology/cryptoassets.
-
-As a few can distribute it.
+appraised via web : mobile apps. It is in fact, not all what makes us tech
 
 ---
 
