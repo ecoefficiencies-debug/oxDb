@@ -1,3 +1,4 @@
 .env
 mobile/.env
 .github/agents/seneca-reader.agent.md
+.github/agents/nomeclature-repository-cloner.agent.md
