@@ -28,7 +28,9 @@ fn main() {
 pub fn upload_blog(con: &mut redis::Connection, blog: &Blog) -> redis::RedisResult<usize> {
     let id: usize = con.incr("blog:id", 1)?;
     let key = format!("blog:{}", id);
-    let data = serde_json::to_string(blog).map_err(|e| redis::RedisError::from((redis::ErrorKind::TypeError, format!("serde error: {}", e))))?;
+    let data = serde_json::to_string(blog).map_err(|e| {
+        redis::RedisError::from((redis::ErrorKind::TypeError, "serde error", e.to_string()))
+    })?;
     let _: () = con.set(&key, data)?;
     Ok(id)
 }
@@ -36,7 +38,9 @@ pub fn upload_blog(con: &mut redis::Connection, blog: &Blog) -> redis::RedisResu
 pub fn fetch_blog(con: &mut redis::Connection, id: usize) -> redis::RedisResult<Blog> {
     let key = format!("blog:{}", id);
     let data: String = con.get(&key)?;
-    let blog: Blog = serde_json::from_str(&data).map_err(|e| redis::RedisError::from((redis::ErrorKind::TypeError, format!("serde error: {}", e))))?;
+    let blog: Blog = serde_json::from_str(&data).map_err(|e| {
+        redis::RedisError::from((redis::ErrorKind::TypeError, "serde error", e.to_string()))
+    })?;
     Ok(blog)
 }
 

@@ -24,9 +24,13 @@ fn parse_front_matter(raw: &str) -> (String, String, String, String) {
     let lines: Vec<&str> = raw.lines().collect();
 
     if lines.first() == Some(&"---") {
-        let end_index = lines.iter().position(|line| *line == "---").unwrap_or(lines.len());
+        let end_index = lines
+            .iter()
+            .enumerate()
+            .skip(1)
+            .find_map(|(index, line)| (*line == "---").then_some(index));
 
-        if end_index > 0 {
+        if let Some(end_index) = end_index {
             let front = lines[1..end_index].join("\n");
             let body = lines[end_index + 1..].join("\n");
 
@@ -54,6 +58,7 @@ fn parse_front_matter(raw: &str) -> (String, String, String, String) {
                 .or_else(|| line.strip_prefix("### "))
         })
         .map(str::trim)
+        .map(str::to_owned)
         .unwrap_or_else(|| "Untitled".to_string());
 
     (title, raw.trim().to_string(), "reader.doc".to_string(), "plain".to_string())
@@ -74,7 +79,11 @@ fn upload_blog(con: &mut redis::Connection, blog: &Blog) -> redis::RedisResult<u
     let id: usize = con.incr("blog:id", 1)?;
     let key = format!("blog:{}", id);
     let data = serde_json::to_string(blog)
-        .map_err(|e| redis::RedisError::from((redis::ErrorKind::TypeError, format!("serde error: {}", e))))?;
+        .map_err(|e| redis::RedisError::from((
+            redis::ErrorKind::TypeError,
+            "failed to serialize blog",
+            format!("serde error: {}", e),
+        )))?;
     let _: () = con.set(&key, data)?;
     Ok(id)
 }
@@ -125,4 +134,39 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::parse_front_matter;
+
+    #[test]
+    fn parses_closed_front_matter() {
+        let raw = "---\ntitle: Example\nauthor: Ada\n---\nBody text";
+
+        assert_eq!(
+            parse_front_matter(raw),
+            (
+                "Example".to_string(),
+                "Body text".to_string(),
+                "Ada".to_string(),
+                "frontmatter".to_string(),
+            )
+        );
+    }
+
+    #[test]
+    fn unclosed_front_matter_falls_back_without_panicking() {
+        let raw = "---\ntitle: Example\n# Body heading";
+
+        assert_eq!(
+            parse_front_matter(raw),
+            (
+                "Body heading".to_string(),
+                raw.to_string(),
+                "reader.doc".to_string(),
+                "plain".to_string(),
+            )
+        );
+    }
 }
