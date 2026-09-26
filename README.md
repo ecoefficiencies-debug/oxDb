@@ -61,3 +61,37 @@ front matter, the full file is stored as content, the first Markdown heading
 Each record is serialized as JSON and stored at `blog:<id>`. The ID is allocated
 by incrementing the Redis key `blog:id`, so subsequent imports continue the
 sequence.
+
+## Pre-pull backup
+
+Before pulling from `origin/main`, the current branch tip was saved at commit
+`3da7657` on `backup/pr-local-redis-reader-before-pull-20260926`. The backup is
+available both as a local branch and as
+`origin/backup/pr-local-redis-reader-before-pull-20260926`.
+
+Inspect the saved commit and its changes:
+
+```sh
+git show --stat backup/pr-local-redis-reader-before-pull-20260926
+```
+
+Switch to the local backup branch and return to the working branch:
+
+```sh
+git switch backup/pr-local-redis-reader-before-pull-20260926
+git switch pr/local-redis-reader
+```
+
+On another clone, fetch and check out the remote backup:
+
+```sh
+git fetch origin
+git switch --track origin/backup/pr-local-redis-reader-before-pull-20260926
+```
+
+To work from the saved snapshot without moving the backup branch, create a
+separate recovery branch:
+
+```sh
+git switch -c recover/pr-local-redis-reader backup/pr-local-redis-reader-before-pull-20260926
+```
