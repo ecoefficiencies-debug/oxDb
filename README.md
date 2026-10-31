@@ -32,6 +32,6 @@ direction rather than implemented features here.
 
 ## Project document
 
-[Read the FanCradle / Alethia project document (PDF)](FanCradle%20agency%20london.pdf.pdf)
+[Rate FanCradle / Alethia project document (PDF)](FanCradle%20agency%20london.pdf.pdf)
 
 The protocol notes are also available in [Protocol.md](Protocol.md).
